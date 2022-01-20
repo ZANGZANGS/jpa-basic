@@ -1,29 +1,45 @@
 package hellojpa;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
+@SequenceGenerator(name = "member_seq_generator", sequenceName = "member_seq")
+
 public class Member {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "member_seq")
     private Long id;
-    private String name;
 
-    public Long getId() {
-        return id;
-    }
+    @Column(name = "name", nullable = false, length = 10)
+    private String username;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    @Column(precision = 2, scale = 2)
+    private BigDecimal age;
 
-    public String getName() {
-        return name;
-    }
+    @Enumerated(EnumType.STRING)
+    private RoleType roleType;
 
-    public void setName(String name) {
-        this.name = name;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createDate;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date lastModifiedDate;
+
+    private LocalDate localDate;
+    private LocalDateTime localDateTime;
+
+    @Lob
+    private String description;
+
+    @Transient
+    private int temp;
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }
