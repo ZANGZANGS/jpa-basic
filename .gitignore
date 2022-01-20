@@ -1,2 +1,4 @@
 # Project exclude paths
 /ex1-hello-jpa/target/
+
+*.class
