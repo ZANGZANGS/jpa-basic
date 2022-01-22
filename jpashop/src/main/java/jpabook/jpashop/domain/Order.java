@@ -29,6 +29,10 @@ public class Order {
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
 
+    @OneToOne
+    @JoinColumn(name = "DELIVERY+ID")
+    private Delivery delivery;
+
 
     //===== 연관 관계 메서드 =====//
     public void addOrderItem(OrderItem orderItem) {
