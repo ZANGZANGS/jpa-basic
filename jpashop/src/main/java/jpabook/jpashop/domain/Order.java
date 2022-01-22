@@ -30,7 +30,7 @@ public class Order {
     private OrderStatus status;
 
     @OneToOne
-    @JoinColumn(name = "DELIVERY+ID")
+    @JoinColumn(name = "DELIVERY_ID")
     private Delivery delivery;
 
 
