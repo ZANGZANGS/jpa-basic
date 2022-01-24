@@ -9,7 +9,8 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-public class Member extends BaseEntity{
+public class Member {
+//    extends BaseEntity{
 
     @Id
     @GeneratedValue
@@ -19,24 +20,19 @@ public class Member extends BaseEntity{
     @Column(name = "USERNAME")
     private String username;
 
-//    private Long teamId;
+    @Embedded
+    private Period wordPeriod;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "TEAM_ID")
-    private Team team;
+    @Embedded
+    private Address HomeAddress;
 
-    @OneToOne
-    @JoinColumn(name = "LOCKER_ID")
-    private Locker locker;
-
-
-    //다대다는 사용X
-//    @ManyToMany
-//    @JoinTable(name = "MEMBER_PRODUCT")
-//    private List<Product> products = new ArrayList<>();
-
-    @OneToMany(mappedBy = "member")
-    private List<MemberProduct> memberProducts = new ArrayList<>();
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "city", column = @Column(name = "work_city")),
+            @AttributeOverride(name = "street", column = @Column(name = "work_street")),
+            @AttributeOverride(name = "zipcode", column = @Column(name = "work_zipcode")),
+    })
+    private Address workAddress;
 
     public Long getId() {
         return id;
@@ -46,9 +42,6 @@ public class Member extends BaseEntity{
         this.id = id;
     }
 
-    public void setTeam(Team team) {
-        this.team = team;
-    }
     public String getUsername() {
         return username;
     }
@@ -57,12 +50,20 @@ public class Member extends BaseEntity{
         this.username = username;
     }
 
-    public Team getTeam() {
-        return team;
+    public Period getWordPeriod() {
+        return wordPeriod;
     }
 
-    public void changeTeam(Team team) {
-        this.team = team;
-        team.getMembers().add(this);
+    public void setWordPeriod(Period wordPeriod) {
+        this.wordPeriod = wordPeriod;
+    }
+
+    public Address getHomeAddress() {
+        return HomeAddress;
+    }
+
+    public void setHomeAddress(Address homeAddress) {
+        HomeAddress = homeAddress;
     }
 }
+

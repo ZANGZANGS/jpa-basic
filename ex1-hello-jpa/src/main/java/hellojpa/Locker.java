@@ -11,6 +11,6 @@ public class Locker {
 
     private String name;
 
-    @OneToOne(mappedBy = "locker")//읽기 전용
-    private Member member;
+//    @OneToOne(mappedBy = "locker")//읽기 전용
+//    private Member member;
 }
