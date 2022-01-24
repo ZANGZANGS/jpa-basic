@@ -20,14 +20,20 @@ public class JpaMain {
 
         try {
 
-            Member member = new Member();
-            member.setUsername("hello");
+            Address address = new Address("city", "street", "zipcode");
 
-            member.setHomeAddress(new Address("city", "street", "zipcode"));
-            member.setWordPeriod(new Period());
+            Member member1 = new Member();
+            member1.setUsername("member1");
+            member1.setHomeAddress(address);
+            em.persist(member1);
 
-            em.persist(member);
 
+            Member member2 = new Member();
+            member2.setUsername("member2");
+            member2.setHomeAddress(new Address(address.getCity(),address.getStreet(), address.getZipcode()));
+            em.persist(member2);
+
+            member1.getHomeAddress().setCity("newCity");
 
 
 
