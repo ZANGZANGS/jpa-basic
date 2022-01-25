@@ -8,6 +8,7 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 public class JpaMain {
     public static void main(String[] args) {
@@ -20,23 +21,37 @@ public class JpaMain {
 
         try {
 
-            Address address = new Address("city", "street", "zipcode");
-
             Member member1 = new Member();
             member1.setUsername("member1");
-            member1.setHomeAddress(address);
+            member1.setHomeAddress(new Address("homeCity", "street", "zipcode"));
             em.persist(member1);
 
+            member1.getFavoriteFoods().add("치킨");
+            member1.getFavoriteFoods().add("피자");
+            member1.getFavoriteFoods().add("햄버거");
 
-            Member member2 = new Member();
-            member2.setUsername("member2");
-            member2.setHomeAddress(new Address(address.getCity(),address.getStreet(), address.getZipcode()));
-            em.persist(member2);
+            AddressEntity addressEntity = new AddressEntity("old1", "street1", "zipcode1");
+            member1.getAddressHistory().add(addressEntity);
+            member1.getAddressHistory().add(new AddressEntity("old2", "street2", "zipcode2"));
 
-            member1.getHomeAddress().setCity("newCity");
+            em.persist(member1);
 
+            em.flush();
+            em.clear();
 
+            System.out.println("======================= START ========================");
+            Member findMember = em.find(Member.class, member1.getId());
 
+            //멤버 주소 변경
+            findMember.setHomeAddress(new Address("zzz", "newStreet", "zipcode"));
+
+            //음식 변경
+            findMember.getFavoriteFoods().remove("치킨");
+            findMember.getFavoriteFoods().add("김치찌개");
+
+            //주소 기록 변경
+            findMember.getAddressHistory().remove(new AddressEntity("old1", "street1", "zipcode1"));
+            findMember.getAddressHistory().add(new AddressEntity("newCity1", "street1", "zipcode1"));
 
             tx.commit();
         } catch (Exception e) {
