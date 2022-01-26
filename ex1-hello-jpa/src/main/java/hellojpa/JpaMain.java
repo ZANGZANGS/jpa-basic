@@ -33,6 +33,9 @@ public class JpaMain {
 
             List<Member> resultList = em.createQuery(cq).getResultList();
 
+            for (Member member : resultList) {
+
+            }
 
             tx.commit();
         } catch (Exception e) {

@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/ex1-hello-jpa/ex1-hello-jpa.iml" filepath="$PROJECT_DIR$/ex1-hello-jpa/ex1-hello-jpa.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/jpa-basic.iml" filepath="$PROJECT_DIR$/.idea/jpa-basic.iml" />
       <module fileurl="file://$PROJECT_DIR$/jpashop/jpashop.iml" filepath="$PROJECT_DIR$/jpashop/jpashop.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jpql/jpql.iml" filepath="$PROJECT_DIR$/jpql/jpql.iml" />
     </modules>
   </component>
 </project>
