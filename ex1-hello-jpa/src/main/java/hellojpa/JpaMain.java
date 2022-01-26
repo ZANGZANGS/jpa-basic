@@ -2,10 +2,10 @@ package hellojpa;
 
 import org.hibernate.Hibernate;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
+import javax.persistence.*;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
@@ -21,37 +21,18 @@ public class JpaMain {
 
         try {
 
-            Member member1 = new Member();
-            member1.setUsername("member1");
-            member1.setHomeAddress(new Address("homeCity", "street", "zipcode"));
-            em.persist(member1);
+            CriteriaBuilder cb  = em.getCriteriaBuilder();
+            CriteriaQuery<Member> query = cb.createQuery(Member.class);
+            Root<Member> m = query.from(Member.class);
+            CriteriaQuery<Member> cq = query.select(m);
 
-            member1.getFavoriteFoods().add("치킨");
-            member1.getFavoriteFoods().add("피자");
-            member1.getFavoriteFoods().add("햄버거");
+            String username = "asd";
+            if (null != username) {
+                cq = cq.where(cb.equal(m.get("username"), "kim"));
+            }
 
-            AddressEntity addressEntity = new AddressEntity("old1", "street1", "zipcode1");
-            member1.getAddressHistory().add(addressEntity);
-            member1.getAddressHistory().add(new AddressEntity("old2", "street2", "zipcode2"));
+            List<Member> resultList = em.createQuery(cq).getResultList();
 
-            em.persist(member1);
-
-            em.flush();
-            em.clear();
-
-            System.out.println("======================= START ========================");
-            Member findMember = em.find(Member.class, member1.getId());
-
-            //멤버 주소 변경
-            findMember.setHomeAddress(new Address("zzz", "newStreet", "zipcode"));
-
-            //음식 변경
-            findMember.getFavoriteFoods().remove("치킨");
-            findMember.getFavoriteFoods().add("김치찌개");
-
-            //주소 기록 변경
-            findMember.getAddressHistory().remove(new AddressEntity("old1", "street1", "zipcode1"));
-            findMember.getAddressHistory().add(new AddressEntity("newCity1", "street1", "zipcode1"));
 
             tx.commit();
         } catch (Exception e) {
