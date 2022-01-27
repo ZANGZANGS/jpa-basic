@@ -1,9 +1,6 @@
 package jpql.main;
 
-import jpql.domain.Address;
 import jpql.domain.Member;
-import jpql.domain.Team;
-import jpql.dto.MemberDto;
 
 import javax.persistence.*;
 import java.util.List;
@@ -18,19 +15,29 @@ public class JPQLMain {
 
         try {
 
-            Member member = Member.builder()
-                            .username("member1")
-                            .age(10)
-                            .build();
-            em.persist(member);
+            for (int i = 0; i < 100; i++) {
+                Member member = Member.builder()
+                        .username("member" + i)
+                        .age(i)
+                        .build();
+                em.persist(member);
+            }
+
+
 
             em.flush();
             em.clear();
 
-            List<MemberDto> resultList = em.createQuery("select new jpql.dto.MemberDto(m.username, m.age) from Member m", MemberDto.class)
+            List<Member> resultList = em.createQuery("select m from Member m order by m.age desc", Member.class)
+                    .setFirstResult(0)
+                    .setMaxResults(10)
                     .getResultList();
-            //생성자 호출하듯이 한다. 실제 dto 클래스에는 생성자가 필요하다.
 
+            System.out.println("result.size = " + resultList.size());
+
+            for (Member member : resultList) {
+                System.out.println("username = " + member.getUsername() + ", age = "+ member.getAge());
+            }
 
             tx.commit();
         } catch (Exception e) {
