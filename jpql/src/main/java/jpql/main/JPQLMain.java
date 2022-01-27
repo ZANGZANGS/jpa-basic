@@ -1,8 +1,12 @@
 package jpql.main;
 
+import jpql.domain.Address;
 import jpql.domain.Member;
+import jpql.domain.Team;
+import jpql.dto.MemberDto;
 
 import javax.persistence.*;
+import java.util.List;
 
 public class JPQLMain {
 
@@ -18,18 +22,14 @@ public class JPQLMain {
                             .username("member1")
                             .age(10)
                             .build();
-
             em.persist(member);
 
-            TypedQuery<Member> query = em.createQuery("select m from Member m where m.username = :username", Member.class);
-            query.setParameter("username", "member1");
-            Member singleResult = query.getSingleResult();
-            System.out.println("singleResult = " + singleResult.getUsername());
+            em.flush();
+            em.clear();
 
-
-//            TypedQuery<Member> query1 = em.createQuery("select m from Member m", Member.class);
-//            Query query2 = em.createQuery("select m.username, m.age from Member m", Member.class); //불명확한 반환 타입
-
+            List<MemberDto> resultList = em.createQuery("select new jpql.dto.MemberDto(m.username, m.age) from Member m", MemberDto.class)
+                    .getResultList();
+            //생성자 호출하듯이 한다. 실제 dto 클래스에는 생성자가 필요하다.
 
 
             tx.commit();
