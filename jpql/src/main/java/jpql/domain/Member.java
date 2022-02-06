@@ -17,6 +17,8 @@ public class Member {
     private String username;
     private int age;
 
+    @Enumerated(EnumType.STRING)
+    private MemberType type;
 
     public void changeTeam(Team team){
         this.team = team;

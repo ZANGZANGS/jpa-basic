@@ -1,6 +1,7 @@
 package jpql.main;
 
 import jpql.domain.Member;
+import jpql.domain.MemberType;
 import jpql.domain.Team;
 
 import javax.persistence.*;
@@ -24,13 +25,14 @@ public class JPQLMain {
                     .username("member1")
                     .age(10)
                     .team(team)
+                    .type(MemberType.ADMIN.ADMIN)
                     .build();
             em.persist(member);
 
             em.flush();
             em.clear();
 
-            List<Member> resultList = em.createQuery("select m from Member m where m.age > (select avg(m2.age) from Member m2)", Member.class)
+            List<Member> resultList = em.createQuery("select m from Member m where m.type = jpql.domain.MemberType.ADMIN", Member.class)
                     .getResultList();
 
             System.out.println("result.size = " + resultList.size());
