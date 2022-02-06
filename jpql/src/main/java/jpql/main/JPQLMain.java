@@ -30,7 +30,7 @@ public class JPQLMain {
             em.flush();
             em.clear();
 
-            List<Member> resultList = em.createQuery("select m from Member m left join m.team t on t.name = 'teamA'", Member.class)
+            List<Member> resultList = em.createQuery("select m from Member m where m.age > (select avg(m2.age) from Member m2)", Member.class)
                     .getResultList();
 
             System.out.println("result.size = " + resultList.size());
