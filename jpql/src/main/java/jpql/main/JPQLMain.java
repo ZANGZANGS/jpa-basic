@@ -1,6 +1,7 @@
 package jpql.main;
 
 import jpql.domain.Member;
+import jpql.domain.Team;
 
 import javax.persistence.*;
 import java.util.List;
@@ -15,29 +16,26 @@ public class JPQLMain {
 
         try {
 
-            for (int i = 0; i < 100; i++) {
-                Member member = Member.builder()
-                        .username("member" + i)
-                        .age(i)
-                        .build();
-                em.persist(member);
-            }
+            Team team = new Team();
+            team.setName("teamA");
+            em.persist(team);
 
-
+            Member member = Member.builder()
+                    .username("member1")
+                    .age(10)
+                    .team(team)
+                    .build();
+            em.persist(member);
 
             em.flush();
             em.clear();
 
-            List<Member> resultList = em.createQuery("select m from Member m order by m.age desc", Member.class)
-                    .setFirstResult(0)
-                    .setMaxResults(10)
+            List<Member> resultList = em.createQuery("select m from Member m left join m.team t on t.name = 'teamA'", Member.class)
                     .getResultList();
 
             System.out.println("result.size = " + resultList.size());
 
-            for (Member member : resultList) {
-                System.out.println("username = " + member.getUsername() + ", age = "+ member.getAge());
-            }
+
 
             tx.commit();
         } catch (Exception e) {

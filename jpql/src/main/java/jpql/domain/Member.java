@@ -18,6 +18,12 @@ public class Member {
     private int age;
 
 
+    public void changeTeam(Team team){
+        this.team = team;
+        team.getMembers().add(this);
+
+    }
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "team_id")
     private Team team;
