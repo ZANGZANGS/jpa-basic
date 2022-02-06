@@ -32,7 +32,13 @@ public class JPQLMain {
             em.flush();
             em.clear();
 
-            List<Member> resultList = em.createQuery("select m from Member m where m.type = jpql.domain.MemberType.ADMIN", Member.class)
+            List<String> resultList = em.createQuery("select " +
+                            "case " +
+                            "when m.age <= 10 then '학생요금' " +
+                            "when m.age >= 60 then '학생요금' " +
+                            "else '일반요금' " +
+                            "end " +
+                            "from Member m", String.class)
                     .getResultList();
 
             System.out.println("result.size = " + resultList.size());
