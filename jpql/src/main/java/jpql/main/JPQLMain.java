@@ -21,20 +21,29 @@ public class JPQLMain {
             team.setName("teamA");
             em.persist(team);
 
-            Member member = Member.builder()
+            Member member1 = Member.builder()
                     .username("member1")
                     .age(10)
                     .team(team)
                     .type(MemberType.ADMIN.ADMIN)
                     .build();
-            em.persist(member);
+            em.persist(member1);
+
+            Member member2 = Member.builder()
+                    .username("member2")
+                    .age(12)
+                    .team(team)
+                    .type(MemberType.ADMIN.ADMIN)
+                    .build();
+            em.persist(member2);
 
             em.flush();
             em.clear();
 
-            List<String> resultList = em.createQuery("select coalesce(m.username, '이름 없음') as username from Member m", String.class)
+            List<String> resultList = em.createQuery("select function('group_concat', m.username) from Member m", String.class)
                     .getResultList();
 
+            System.out.println("결과 = "+resultList.get(0));
             System.out.println("result.size = " + resultList.size());
 
 
