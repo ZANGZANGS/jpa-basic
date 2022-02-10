@@ -5,6 +5,7 @@ import jpql.domain.MemberType;
 import jpql.domain.Team;
 
 import javax.persistence.*;
+import java.util.Collection;
 import java.util.List;
 
 public class JPQLMain {
@@ -40,11 +41,17 @@ public class JPQLMain {
             em.flush();
             em.clear();
 
-            List<String> resultList = em.createQuery("select function('group_concat', m.username) from Member m", String.class)
+
+//            members. 경로 탐색이 되지 않는다. 명시적인 Join을 사용할 것
+//            List<Collection> resultList = em.createQuery("select t.members from Team t", Collection.class)
+//                    .getResultList();
+
+            List<Member> resultList = em.createQuery("select m from Team t join t.members m", Member.class)
                     .getResultList();
 
-            System.out.println("결과 = "+resultList.get(0));
-            System.out.println("result.size = " + resultList.size());
+            for (Member m : resultList) {
+                System.out.println("Member = " + m.toString());
+            }
 
 
 
