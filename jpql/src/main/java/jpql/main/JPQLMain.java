@@ -61,14 +61,11 @@ public class JPQLMain {
 //                System.out.println("Member = " + m.getUsername() + "  Team = " + m.getTeam().getName());
 //            }
 
-            List<Team> resultList = em.createQuery("select distinct t from Team t join fetch t.members", Team.class)
+            List<Member> resultList = em.createQuery("select m from Member m where m = :member", Member.class)
+                    .setParameter("member", member1)
                     .getResultList();
 
-            for (Team t : resultList) {
-                for (Member member: t.getMembers()) {
-                    System.out.println("Team = " + t.getName() + " Member = " + member.getUsername());
-                }
-            }
+            System.out.println("member = " + resultList.get(0).getUsername());
 
 
 
