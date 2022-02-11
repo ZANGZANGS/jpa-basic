@@ -18,39 +18,56 @@ public class JPQLMain {
 
         try {
 
-            Team team = new Team();
-            team.setName("teamA");
-            em.persist(team);
+            Team teamA = new Team();
+            teamA.setName("teamA");
+            em.persist(teamA);
+            Team teamB = new Team();
+            teamB.setName("teamB");
+            em.persist(teamB);
+
 
             Member member1 = Member.builder()
-                    .username("member1")
+                    .username("회원1")
                     .age(10)
-                    .team(team)
+                    .team(teamA)
                     .type(MemberType.ADMIN.ADMIN)
                     .build();
             em.persist(member1);
 
             Member member2 = Member.builder()
-                    .username("member2")
+                    .username("회원2")
                     .age(12)
-                    .team(team)
+                    .team(teamA)
                     .type(MemberType.ADMIN.ADMIN)
                     .build();
             em.persist(member2);
+
+            Member member3 = Member.builder()
+                    .username("회원3")
+                    .age(16)
+                    .team(teamB)
+                    .type(MemberType.ADMIN.ADMIN)
+                    .build();
+            em.persist(member3);
 
             em.flush();
             em.clear();
 
 
-//            members. 경로 탐색이 되지 않는다. 명시적인 Join을 사용할 것
-//            List<Collection> resultList = em.createQuery("select t.members from Team t", Collection.class)
+//            List<Member> resultList = em.createQuery("select m from Member m join fetch m.team", Member.class)
 //                    .getResultList();
+//
+//            for (Member m : resultList) {
+//                System.out.println("Member = " + m.getUsername() + "  Team = " + m.getTeam().getName());
+//            }
 
-            List<Member> resultList = em.createQuery("select m from Team t join t.members m", Member.class)
+            List<Team> resultList = em.createQuery("select distinct t from Team t join fetch t.members", Team.class)
                     .getResultList();
 
-            for (Member m : resultList) {
-                System.out.println("Member = " + m.toString());
+            for (Team t : resultList) {
+                for (Member member: t.getMembers()) {
+                    System.out.println("Team = " + t.getName() + " Member = " + member.getUsername());
+                }
             }
 
 
