@@ -61,11 +61,11 @@ public class JPQLMain {
 //                System.out.println("Member = " + m.getUsername() + "  Team = " + m.getTeam().getName());
 //            }
 
-            List<Member> resultList = em.createQuery("select m from Member m where m = :member", Member.class)
-                    .setParameter("member", member1)
-                    .getResultList();
+            Member result = em.createNamedQuery("Member.findByUsername", Member.class)
+                    .setParameter("username", "회원1")
+                    .getSingleResult();
 
-            System.out.println("member = " + resultList.get(0).getUsername());
+            System.out.println("member = " + result.getUsername());
 
 
 
